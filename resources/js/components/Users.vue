@@ -67,20 +67,23 @@
       <div class="modal-body">
         
       <form  @submit.prevent="createUser">
+          <AlertError :form="form" />
+          
+
         <div class="mb-4">
-          <input id="name" v-model="form.name" type="text" name="name" placeholder="name" class="form-control">
+          <input id="name" v-model="form.name" type="text" name="name" placeholder="name" class="form-control" :class="[{'is-invalid' : form.errors.has('name')}]">
           <HasError :form="form" field="name" />
         </div>
         <div class="mb-4">
-          <input id="email" v-model="form.email" type="email" name="email"  placeholder="email" class="form-control"  >
+          <input id="email" v-model="form.email" type="email" name="email"  placeholder="email" class="form-control" :class="[{'is-invalid' : form.errors.has('email')}]" >
           <HasError :form="form" field="email" />
         </div>
         <div class="mb-4">
-          <textarea id="bio" v-model="form.bio" type="text" name="bio"  placeholder="bio for the user" class="form-control"></textarea>
+          <textarea id="bio" v-model="form.bio" type="text" name="bio"  placeholder="bio for the user" class="form-control" :class="[{'is-invalid' : form.errors.has('bio')}]"></textarea>
           <HasError :form="form" field="bio" />
         </div>
         <div class="mb-4">
-          <select  name="order" v-model="form.order" class="form-control">
+          <select  name="order" v-model="form.order" class="form-control" :class="[{'is-invalid' : form.errors.has('order')}]" >
             <option value="">serelect user role</option>
             <option value="admin">admin</option>
             <option value="user">user</option>
@@ -91,7 +94,7 @@
         </div>
         
         <div class="mb-4">
-          <input id="password" v-model="form.password" type="password" name="password" placeholder="password" class="form-control">
+          <input id="password" v-model="form.password" type="password" name="password" placeholder="password" class="form-control" :class="[{'is-invalid' : form.errors.has('password')}]">
           <HasError :form="form" field="password" />
 
         </div>
@@ -99,6 +102,8 @@
           
         
         <div class="modal-footer">
+          <Button :form="form">Submit</Button>
+
           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
           <input type="submit" class="btn btn-success" value="Create">
         </div>

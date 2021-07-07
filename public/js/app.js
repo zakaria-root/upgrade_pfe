@@ -2079,6 +2079,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -39057,6 +39062,8 @@ var render = function() {
                     }
                   },
                   [
+                    _c("AlertError", { attrs: { form: _vm.form } }),
+                    _vm._v(" "),
                     _c(
                       "div",
                       { staticClass: "mb-4" },
@@ -39071,6 +39078,9 @@ var render = function() {
                             }
                           ],
                           staticClass: "form-control",
+                          class: [
+                            { "is-invalid": _vm.form.errors.has("name") }
+                          ],
                           attrs: {
                             id: "name",
                             type: "text",
@@ -39109,6 +39119,9 @@ var render = function() {
                             }
                           ],
                           staticClass: "form-control",
+                          class: [
+                            { "is-invalid": _vm.form.errors.has("email") }
+                          ],
                           attrs: {
                             id: "email",
                             type: "email",
@@ -39147,6 +39160,7 @@ var render = function() {
                             }
                           ],
                           staticClass: "form-control",
+                          class: [{ "is-invalid": _vm.form.errors.has("bio") }],
                           attrs: {
                             id: "bio",
                             type: "text",
@@ -39187,6 +39201,9 @@ var render = function() {
                               }
                             ],
                             staticClass: "form-control",
+                            class: [
+                              { "is-invalid": _vm.form.errors.has("order") }
+                            ],
                             attrs: { name: "order" },
                             on: {
                               change: function($event) {
@@ -39248,6 +39265,9 @@ var render = function() {
                             }
                           ],
                           staticClass: "form-control",
+                          class: [
+                            { "is-invalid": _vm.form.errors.has("password") }
+                          ],
                           attrs: {
                             id: "password",
                             type: "password",
@@ -39276,8 +39296,32 @@ var render = function() {
                       1
                     ),
                     _vm._v(" "),
-                    _vm._m(2)
-                  ]
+                    _c(
+                      "div",
+                      { staticClass: "modal-footer" },
+                      [
+                        _c("Button", { attrs: { form: _vm.form } }, [
+                          _vm._v("Submit")
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-danger",
+                            attrs: { type: "button", "data-dismiss": "modal" }
+                          },
+                          [_vm._v("Close")]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          staticClass: "btn btn-success",
+                          attrs: { type: "submit", value: "Create" }
+                        })
+                      ],
+                      1
+                    )
+                  ],
+                  1
                 )
               ])
             ])
@@ -39380,26 +39424,6 @@ var staticRenderFns = [
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-danger",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
-        [_vm._v("Close")]
-      ),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "btn btn-success",
-        attrs: { type: "submit", value: "Create" }
-      })
     ])
   }
 ]
