@@ -14,13 +14,25 @@ window.Vue = require('vue').default;
 
 import VueRouter from 'vue-router';
 import Form from 'vform';
+import moment from 'moment';
 import {
   HasError,
   AlertError,
 } from 'vform/src/components/bootstrap5'
+import Vue from 'vue';
 window.Form = Form;
 Vue.use(VueRouter);
 
+//filter vue text
+Vue.filter('upper', (value) => {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+})
+
+
+//filter vue date
+Vue.filter('myDate', (date) => {
+  return moment(date).format('MMMM Do YYYY');
+})
 
 const routes = [
     { path: '/profile', component: require('./components/Profile.vue').default },

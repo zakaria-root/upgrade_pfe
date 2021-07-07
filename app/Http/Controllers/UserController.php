@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        return User::latest()->paginate(18);
     }
 
     /**
@@ -30,10 +30,10 @@ class UserController extends Controller
     {
         $data->validate([
             'name' => ['required', 'string', 'max:50'],
-            'email' => ['required', 'string', 'email', 'max:20', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:50', 'unique:users'],
             'bio' => ['required', 'string', 'max:255'],
             'order' => 'required',
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:4', ],
         ]);
         
         return User::create([

@@ -15,27 +15,27 @@
           <thead>
             <tr>
                
-              <th scope="col">Order</th>
+             
               <th scope="col">Name</th>
-              <th scope="col">email</th>
-              <th scope="col">contact</th>
-              <th scope="col">option</th>
+              <th scope="col">Email</th>
+              <th scope="col">Bio</th>
+              <th scope="col">Role</th>
+              <th scope="col">Craeted At</th>
+              <th scope="col">Option</th>
             </tr>
           </thead>
           <tbody>
-            <tr scope="row">
+            <tr v-for="user in users" :key="user.id" scope="row">
 
-              
                       
+                      <td>{{ user.name | upper }}</td>
+                      <td>{{ user.email }}</td>
                       <td>
-                        1392
-                      </td>
-                      <td>James Yates</td>
-                      <td>
-                        Web Designer
+                        {{ user.bio | upper  }}
                         <small class="d-block">Far far away, behind the word mountains</small>
                       </td>
-                      <td>+63 983 0962 971</td>
+                      <td>{{ user.order | upper }}</td>
+                      <td>{{ user.created_at | myDate }}</td>
                       <td>
                           <a href="">
                               <i class="far fa-edit fa-lg px-1 "></i>
@@ -113,7 +113,7 @@
           
         
         <div class="modal-footer">
-          <Button :form="form">Submit</Button>
+         
 
           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
           <input type="submit" class="btn btn-success" value="Create">
@@ -136,6 +136,7 @@ import { Button, HasError, AlertError } from 'vform/src/components/bootstrap5'
   },
       data(){
           return {
+            users:{},
             form: new Form({
               name:'',
               email:'',
@@ -146,12 +147,20 @@ import { Button, HasError, AlertError } from 'vform/src/components/bootstrap5'
           }
         },
         methods:{
+          loadUsers(){
+            axios.get('/api/user').then(
+              ({data}) => {
+                this.users = data.data;
+            
+              }
+            )
+          },
           createUser(){
             this.form.post('/api/user');
           }
         },
-        mounted() {
-            console.log('Component mounted.')
+        created() {
+             return this.loadUsers();
         }
     }
 </script>
