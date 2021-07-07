@@ -8,10 +8,19 @@ require('./bootstrap');
 require('admin-lte');
 
 
+
+
 window.Vue = require('vue').default;
 
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
+import VueRouter from 'vue-router';
+import Form from 'vform';
+import {
+  HasError,
+  AlertError,
+} from 'vform/src/components/bootstrap5'
+window.Form = Form;
+Vue.use(VueRouter);
+
 
 const routes = [
     { path: '/profile', component: require('./components/Profile.vue').default },
@@ -22,6 +31,8 @@ const routes = [
   const router = new VueRouter({
     routes // short for `routes: routes`
   })
+
+  
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -34,6 +45,8 @@ const routes = [
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component(HasError.name, HasError);
+Vue.component(AlertError.name, AlertError);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -42,6 +55,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  */
 
 const app = new Vue({
+  
     el: '#app',
     router
 });

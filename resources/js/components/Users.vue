@@ -1,16 +1,16 @@
 <template>
      <div class="content">
     <div class="container">
-      <h2 class="mb-5">LIST DES EMPLOYEE 
+      <h2 class="mb-3">LIST DES EMPLOYEE 
           <div 
           data-toggle="modal" 
           data-target="#exampleModal"
-          class="btn btn-outline-success float-right">
-          Add new
-          <i class="fas fa-user-plus pl-2"></i></div></h2>
+          class=" float-right">
+          
+          <i class="fas fa-user-plus pr-3"></i></div></h2>
         
-      <div class="table-responsive">
-
+      <div class="table-responsive ">
+<hr>
         <table class="table custom-table">
           <thead>
             <tr>
@@ -59,17 +59,50 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add New User</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        
+      <form  @submit.prevent="createUser">
+        <div class="mb-4">
+          <input id="name" v-model="form.name" type="text" name="name" placeholder="name" class="form-control">
+          <HasError :form="form" field="name" />
+        </div>
+        <div class="mb-4">
+          <input id="email" v-model="form.email" type="email" name="email"  placeholder="email" class="form-control"  >
+          <HasError :form="form" field="email" />
+        </div>
+        <div class="mb-4">
+          <textarea id="bio" v-model="form.bio" type="text" name="bio"  placeholder="bio for the user" class="form-control"></textarea>
+          <HasError :form="form" field="bio" />
+        </div>
+        <div class="mb-4">
+          <select  name="order" v-model="form.order" class="form-control">
+            <option value="">serelect user role</option>
+            <option value="admin">admin</option>
+            <option value="user">user</option>
+            <option value="auther">auther</option>
+          <!-- <input id="order"  type="order" name="order"  placeholder="order" > -->
+          </select>
+          <HasError :form="form" field="order" />
+        </div>
+        
+        <div class="mb-4">
+          <input id="password" v-model="form.password" type="password" name="password" placeholder="password" class="form-control">
+          <HasError :form="form" field="password" />
+
+        </div>
+          
+          
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-success" value="Create">
+        </div>
+      </form>
       </div>
     </div>
   </div>
@@ -78,7 +111,29 @@
 </template>
 
 <script>
+
+import { Button, HasError, AlertError } from 'vform/src/components/bootstrap5'
+
     export default {
+        components: {
+    Button, HasError, AlertError
+  },
+      data(){
+          return {
+            form: new Form({
+              name:'',
+              email:'',
+              bio:'',
+              order:'',
+              password:'',
+            })
+          }
+        },
+        methods:{
+          createUser(){
+            this.form.post('/api/user');
+          }
+        },
         mounted() {
             console.log('Component mounted.')
         }
