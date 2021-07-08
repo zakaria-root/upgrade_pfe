@@ -242,7 +242,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
+        <!--component vue.js-->
         <router-view></router-view>
+
+        <!-- set progressbar -->
+        <vue-progress-bar></vue-progress-bar>
+
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>

@@ -4,7 +4,7 @@
       <h2 class="mb-3">LIST DES EMPLOYEE 
           <div 
           data-toggle="modal" 
-          data-target="#exampleModal"
+          data-target="#addUser"
           class=" float-right">
           
           <i class="fas fa-user-plus pr-3"></i></div></h2>
@@ -55,11 +55,11 @@
 
 
     </div>
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="addUser" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add New User</h5>
+        <h5 class="modal-title" id="addUser">Add New User</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -156,11 +156,31 @@ import { Button, HasError, AlertError } from 'vform/src/components/bootstrap5'
             )
           },
           createUser(){
-            this.form.post('/api/user');
+            this.$Progress.start();
+            
+            this.form.post('/api/user')
+            .then(() => {
+              Fire.$emit('afterCreated');
+              $('#addUser').modal('hide')
+              // document.getElementsByClassName('modal-backdrop fade show').innerHTML = '';
+              $('.modal-backdrop').replaceWith("");
+              Toast.fire({
+                icon: 'success',
+                title: 'Signed in successfully'
+              })
+            this.$Progress.finish()
+            })
+            .catch(() => {
+              this.$Progress.fail()
+            })
+            
+            
           }
         },
         created() {
-             return this.loadUsers();
+            this.loadUsers();
+            Fire.$on('afterCreated', () => this.loadUsers());
+            // setInterval(() => this.loadUsers(), 3000);
         }
     }
 </script>

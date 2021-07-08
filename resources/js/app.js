@@ -11,7 +11,8 @@ require('admin-lte');
 
 
 window.Vue = require('vue').default;
-
+import Swal from 'sweetalert2'
+import VueProgressBar from 'vue-progressbar'
 import VueRouter from 'vue-router';
 import Form from 'vform';
 import moment from 'moment';
@@ -20,8 +21,34 @@ import {
   AlertError,
 } from 'vform/src/components/bootstrap5'
 import Vue from 'vue';
+
+//vue router pour definiti les routeavec vue.js
 window.Form = Form;
 Vue.use(VueRouter);
+
+// sweetalert Vue.js defini les alert 
+window.Swal = Swal;
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
+
+window.Toast = Toast;
+
+// progressbar  with vue js
+Vue.use(VueProgressBar, {
+  color: 'rgb(143, 255, 199)',
+  failedColor: 'red',
+  height: '4px',
+})
 
 //filter vue text
 Vue.filter('upper', (value) => {
@@ -44,7 +71,9 @@ const routes = [
     routes // short for `routes: routes`
   })
 
-  
+//pour la declonchment des events
+
+window.Fire = new Vue();
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
