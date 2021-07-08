@@ -3,9 +3,9 @@
     <div class="container">
       <h2 class="mb-3">LIST DES EMPLOYEE 
           <div 
-          data-toggle="modal" 
-          data-target="#addUser"
-          class=" float-right">
+          @click="resetModal"
+          
+          class="float-right">
           
           <i class="fas fa-user-plus pr-3"></i></div></h2>
         
@@ -37,11 +37,11 @@
                       <td>{{ user.order | upper }}</td>
                       <td>{{ user.created_at | myDate }}</td>
                       <td>
-                          <a href="">
-                              <i class="far fa-edit fa-lg px-1 "></i>
+                          <a href="#">
+                              <i @click="editeUser(user)" class="far fa-edit fa-lg px-1 "></i>
                           </a>/
-                          <a href="">
-                              <i class="far fa-trash-alt fa-lg px-1 red"></i>
+                          <a href="#">
+                              <i @click="deleteUser(user.id)" class="far fa-trash-alt fa-lg px-1 red" ></i>
                           </a>
                       </td>
             
@@ -55,18 +55,19 @@
 
 
     </div>
-<div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="addUser" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+<div class="modal fade " id="addUser" tabindex="-1" role="dialog" aria-labelledby="addUser" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addUser">Add New User</h5>
+        <h5  v-show="!editeMode" class="modal-title" id="addUser">Add New </h5>
+        <h5  v-show="editeMode" class="modal-title" id="addUser">Update User Info </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         
-      <form  @submit.prevent="createUser">
+      <form  @submit.prevent="editeMode ? updateUser() : createUser()">
           
           <div 
           v-if="form.errors.has('name') || 
@@ -116,7 +117,8 @@
          
 
           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-          <input type="submit" class="btn btn-success" value="Create">
+          <input type="submit" v-show="!editeMode" class="btn btn-success" value="Create">
+          <input type="submit" v-show="editeMode" class="btn btn-primary" value="Update">
         </div>
       </form>
       </div>
@@ -136,8 +138,10 @@ import { Button, HasError, AlertError } from 'vform/src/components/bootstrap5'
   },
       data(){
           return {
+            editeMode :false,
             users:{},
             form: new Form({
+              id:'',
               name:'',
               email:'',
               bio:'',
@@ -147,6 +151,74 @@ import { Button, HasError, AlertError } from 'vform/src/components/bootstrap5'
           }
         },
         methods:{
+          updateUser(){
+            this.$Progress.start();
+            this.form.put('/api/user/' + this.form.id)
+            .then(() => {
+                Swal.fire(
+                  'Updated!',
+                  'Your user has been updated.',
+                  'success'
+                )
+                $('#addUser').modal('hide')
+                $('.modal-backdrop').replaceWith("");
+                Fire.$emit('afterCreated');
+               this.$Progress.finish();
+            })
+            .catch(() =>{
+              swalWithBootstrapButtons.fire(
+                'Cancelled',
+                'Your imaginary file is safe :)',
+                'error'
+              )
+              this.$Progress.fail();
+            })
+          },
+          editeUser(user){
+            this.editeMode =true;
+            this.form.fill(user)
+            $('#addUser').modal('show')
+          },
+          resetModal(){
+            this.editeMode =false;
+            this.form.reset()
+            $('#addUser').modal('show')
+          },
+          deleteUser(id){
+              Swal.fire({
+              title: 'Are you sure?',
+              text: "You won't be able to revert this!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.$Progress.start();
+                this.form.delete('api/user/'+ id)
+                .then(() => {
+                  Swal.fire(
+                  'Deleted!',
+                  'Your user has been deleted.',
+                  'success'
+                )
+                Fire.$emit('afterCreated');
+                this.$Progress.finish()
+                })
+                .catch(() => {
+                  swalWithBootstrapButtons.fire(
+                    'Cancelled',
+                    'Your imaginary file is safe :)',
+                    'error'
+                  )
+                  this.$Progress.fail()
+                })
+
+                
+              }
+            })
+          },
           loadUsers(){
             axios.get('/api/user').then(
               ({data}) => {
@@ -162,7 +234,6 @@ import { Button, HasError, AlertError } from 'vform/src/components/bootstrap5'
             .then(() => {
               Fire.$emit('afterCreated');
               $('#addUser').modal('hide')
-              // document.getElementsByClassName('modal-backdrop fade show').innerHTML = '';
               $('.modal-backdrop').replaceWith("");
               Toast.fire({
                 icon: 'success',
