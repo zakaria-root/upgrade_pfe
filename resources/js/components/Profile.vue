@@ -298,7 +298,7 @@
                   <!-- /.tab-pane -->
 
                   <div class="tab-pane" id="settings">
-                    <form class="form-horizontal">
+                    <form  @submit.prevent="updateProfile" class="form-horizontal">
                       <div class="form-group row">
                         <label for="inputName" class="col-sm-2 col-form-label">Name</label>
                         <div class="col-sm-10">
@@ -385,20 +385,35 @@
               bio:'',
               order:'',
               password:'',
+              photo:'',
             })
           }
         },
         methods:{
+            updateProfile(){
+                this.form.put('api/profile')
+                .then(() => {
+                    Swal.fire(
+                  'Updated!',
+                  'Your profile has been updated.',
+                  'success'
+                )
+                })
+                .catch(() => {
+
+                })
+            },
             uploadFile(e){
             
             let file = e.target.files[0];
             let reader = new FileReader();
 
-            reader.onloadend = function() {
-                console.log('RESULT', reader.result)
+            reader.onloadend = () => {
+                // console.log('RESULT', reader.result)
+                this.form.photo = reader.result;
             }
             reader.readAsDataURL(file);
-            
+
             }
         },
         mounted() {

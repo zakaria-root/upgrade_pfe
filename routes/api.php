@@ -22,3 +22,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::apiResource('user', UserController::class);
 
 Route::get('profile', [UserController::class, 'profile'])->name('profile');
+
+Route::put('profile', [UserController::class, 'updateProfile']);
+

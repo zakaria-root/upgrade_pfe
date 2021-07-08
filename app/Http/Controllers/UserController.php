@@ -58,10 +58,17 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
   
+    public function updateProfile(Request $request)
+    {
+        $user = auth('api')->user();
+        return ['image' => $request->photo];
+        $name = time().'.' . explode('/', explode(':', substr($request->photo, 0, strpos($request->photo, ';')))[1])[1];
 
+        \Image::make($request->photo)->save(public_path('img/profile/').$name);
+    }
     public function profile()
     {
-        
+
         return auth('api')->user();
     }
     /**
