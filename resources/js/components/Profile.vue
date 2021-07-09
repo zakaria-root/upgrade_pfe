@@ -298,30 +298,46 @@
                   <!-- /.tab-pane -->
 
                   <div class="tab-pane" id="settings">
-                    <form  @submit.prevent="updateProfile" class="form-horizontal">
+                    <form  @submit.prevent="updateProfile" class="form-horizontal" enctype="multipart/form-data" >
+                              <div 
+                                v-if="form.errors.has('name') || 
+                                      form.errors.has('email') ||
+                                      form.errors.has('password') ||
+                                      form.errors.has('bio') ||
+                                      form.errors.has('order')" 
+                                class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Errors! </strong> There were some problems with your input.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
                       <div class="form-group row">
                         <label for="inputName" class="col-sm-2 col-form-label">Name</label>
                         <div class="col-sm-10">
-                          <input  v-model="form.name" type="name" class="form-control" id="inputName" placeholder="Name">
+                          <input  v-model="form.name" type="name" class="form-control" id="inputName" placeholder="Name" :class="[{'is-invalid' : form.errors.has('name')}]" >
+                                    <HasError :form="form" field="name" />
                         </div>
                       </div>
                       <div class="form-group row">
                         <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
                         <div class="col-sm-10">
-                          <input v-model="form.email" type="email" class="form-control" id="inputEmail" placeholder="Email">
+                          <input v-model="form.email" type="email" class="form-control" id="inputEmail" placeholder="Email" :class="[{'is-invalid' : form.errors.has('email')}]" >
+                                <HasError :form="form" field="email" />
                         </div>
                       </div>
                       
                       <div class="form-group row">
                         <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
                         <div class="col-sm-10">
-                          <textarea v-model="form.bio" class="form-control" id="inputExperience" placeholder="Experience"></textarea>
+                          <textarea v-model="form.bio" class="form-control" id="inputExperience" placeholder="Experience" :class="[{'is-invalid' : form.errors.has('bio')}]"></textarea>
+                                <HasError :form="form" field="bio" />
                         </div>
                       </div>
                       <div class="form-group row">
                         <label for="inputSkills" class="col-sm-2 col-form-label">Password</label>
                         <div class="col-sm-10">
-                          <input v-model="form.password"  type="text" class="form-control" id="inputSkills" placeholder="Password">
+                          <input v-model="form.password"  type="password" class="form-control" id="inputSkills" placeholder="Password" :class="[{'is-invalid' : form.errors.has('password')}]">
+                                <HasError :form="form" field="password" />
                         </div>
                       </div>
                       <div class="form-group row">
@@ -334,14 +350,15 @@
                             <option value="auther">auther</option>
                         <!-- <input id="order"  type="order" name="order"  placeholder="order" > -->
                         </select>
+                              <HasError :form="form" field="order" />
                            </div>
                         </div>
-                      <div class="form-group row">
+                      <!-- <div class="form-group row">
                         <label for="inputSkills" class="col-sm-2 col-form-label">Image</label>
                         <div class="col-sm-10">
-                          <input @change="uploadFile"  type="file" class="form-control" id="inputSkills" placeholder="Skills">
+                          <input @change="uploadFile" name="photo" type="file" class="form-control" id="inputSkills" placeholder="Skills">
                         </div>
-                      </div>
+                      </div> -->
 
                       <div class="form-group row">
                         <div class="offset-sm-2 col-sm-10">
@@ -391,6 +408,7 @@
         },
         methods:{
             updateProfile(){
+              this.$Progress.start();
                 this.form.put('api/profile')
                 .then(() => {
                     Swal.fire(
@@ -398,9 +416,12 @@
                   'Your profile has been updated.',
                   'success'
                 )
+                Fire.$emit('afterUpdated');
+                this.$Progress.finish();
                 })
                 .catch(() => {
-
+                  
+                  this.$Progress.fail();
                 })
             },
             uploadFile(e){
@@ -420,8 +441,13 @@
             console.log('Component mounted.')
         },
         created(){
+          
+           axios.get('api/profile')
+            .then(({data}) => this.form.fill(data));
+            Fire.$on('afterUpdated' , () => 
             axios.get('api/profile')
             .then(({data}) => this.form.fill(data))
+          )
         }
     }
 </script>

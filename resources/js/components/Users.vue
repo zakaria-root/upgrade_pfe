@@ -76,11 +76,11 @@
                 form.errors.has('bio') ||
                 form.errors.has('order')" 
           class="alert alert-danger alert-dismissible fade show" role="alert">
-  <strong>Errors! </strong> There were some problems with your input.
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <strong>Errors! </strong> There were some problems with your input.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
-  </button>
-</div>
+    </button>
+    </div>
 
         <div class="mb-4">
           <input id="name" v-model="form.name" type="text" name="name" placeholder="name" class="form-control" :class="[{'is-invalid' : form.errors.has('name')}]">

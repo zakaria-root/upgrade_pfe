@@ -7,7 +7,7 @@ use App\Models\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Http\UploadedFile;
 class UserController extends Controller
 {
 
@@ -60,11 +60,25 @@ class UserController extends Controller
   
     public function updateProfile(Request $request)
     {
-        $user = auth('api')->user();
-        return ['image' => $request->photo];
-        $name = time().'.' . explode('/', explode(':', substr($request->photo, 0, strpos($request->photo, ';')))[1])[1];
-
-        \Image::make($request->photo)->save(public_path('img/profile/').$name);
+        $id = auth('api')->user()->id;
+        $user = User::findOrFail($id);
+        $this->validate($request, [
+            'name' => 'required | string | max:50',
+            'email' => 'required | string | email | max:50 | unique:users,email,'. $user->id,
+            'bio' => 'required | string | max:255',
+            'order' => 'required',
+            'password' => 'min:4',
+        ]);
+        // $name = time().'.' . explode('/', explode(':', substr($request->photo, 0, strpos($request->photo, ';')))[1])[1];
+        
+        if (!empty($request->password)) {
+            $request->merge(
+                ['password' => Hash::make($request['password'])]
+            );
+        }
+        $user->update($request->all());
+        
+        
     }
     public function profile()
     {
