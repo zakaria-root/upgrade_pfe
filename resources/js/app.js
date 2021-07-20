@@ -21,6 +21,9 @@ import {
   AlertError,
 } from 'vform/src/components/bootstrap5'
 import Vue from 'vue';
+import Gate from './Gate';
+
+Vue.prototype.$gate = new Gate(window.user);
 
 //vue router pour definiti les routeavec vue.js
 window.Form = Form;

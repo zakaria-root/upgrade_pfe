@@ -2679,12 +2679,62 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this5 = this;
 
-    this.loadUsers();
-    Fire.$on('afterCreated', function () {
-      return _this5.loadUsers();
-    }); // setInterval(() => this.loadUsers(), 3000);
+    if (this.$gate.is_admin()) {
+      this.loadUsers();
+      Fire.$on('afterCreated', function () {
+        return _this5.loadUsers();
+      }); // setInterval(() => this.loadUsers(), 3000);
+    }
   }
 });
+
+/***/ }),
+
+/***/ "./resources/js/Gate.js":
+/*!******************************!*\
+  !*** ./resources/js/Gate.js ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Gate)
+/* harmony export */ });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Gate = /*#__PURE__*/function () {
+  function Gate(user) {
+    _classCallCheck(this, Gate);
+
+    this.user = user;
+  }
+
+  _createClass(Gate, [{
+    key: "is_admin",
+    value: function is_admin() {
+      return user.order === 'admin';
+    }
+  }, {
+    key: "is_auther",
+    value: function is_auther() {
+      return user.order === 'auther';
+    }
+  }, {
+    key: "is_user",
+    value: function is_user() {
+      return user.order === 'user';
+    }
+  }]);
+
+  return Gate;
+}();
+
+
 
 /***/ }),
 
@@ -2700,12 +2750,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vue_progressbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-progressbar */ "./node_modules/vue-progressbar/dist/vue-progressbar.js");
 /* harmony import */ var vue_progressbar__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_progressbar__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var vform__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vform */ "./node_modules/vform/dist/vform.es.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var vform_src_components_bootstrap5__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vform/src/components/bootstrap5 */ "./node_modules/vform/src/components/bootstrap5/index.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var _Gate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Gate */ "./resources/js/Gate.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -2722,10 +2773,12 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js"
 
 
 
- //vue router pour definiti les routeavec vue.js
+
+
+vue__WEBPACK_IMPORTED_MODULE_6__.default.prototype.$gate = new _Gate__WEBPACK_IMPORTED_MODULE_5__.default(window.user); //vue router pour definiti les routeavec vue.js
 
 window.Form = vform__WEBPACK_IMPORTED_MODULE_2__.default;
-vue__WEBPACK_IMPORTED_MODULE_5__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_6__.default); // sweetalert Vue.js defini les alert 
+vue__WEBPACK_IMPORTED_MODULE_6__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_7__.default); // sweetalert Vue.js defini les alert 
 
 window.Swal = (sweetalert2__WEBPACK_IMPORTED_MODULE_0___default());
 var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().mixin({
@@ -2741,17 +2794,17 @@ var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().mixin({
 });
 window.Toast = Toast; // progressbar  with vue js
 
-vue__WEBPACK_IMPORTED_MODULE_5__.default.use((vue_progressbar__WEBPACK_IMPORTED_MODULE_1___default()), {
+vue__WEBPACK_IMPORTED_MODULE_6__.default.use((vue_progressbar__WEBPACK_IMPORTED_MODULE_1___default()), {
   color: 'rgb(143, 255, 199)',
   failedColor: 'red',
   height: '4px'
 }); //filter vue text
 
-vue__WEBPACK_IMPORTED_MODULE_5__.default.filter('upper', function (value) {
+vue__WEBPACK_IMPORTED_MODULE_6__.default.filter('upper', function (value) {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }); //filter vue date
 
-vue__WEBPACK_IMPORTED_MODULE_5__.default.filter('myDate', function (date) {
+vue__WEBPACK_IMPORTED_MODULE_6__.default.filter('myDate', function (date) {
   return moment__WEBPACK_IMPORTED_MODULE_3___default()(date).format('MMMM Do YYYY');
 });
 var routes = [{
@@ -2767,12 +2820,12 @@ var routes = [{
   path: '/users',
   component: __webpack_require__(/*! ./components/Users.vue */ "./resources/js/components/Users.vue").default
 }];
-var router = new vue_router__WEBPACK_IMPORTED_MODULE_6__.default({
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_7__.default({
   routes: routes // short for `routes: routes`
 
 }); //pour la declonchment des events
 
-window.Fire = new vue__WEBPACK_IMPORTED_MODULE_5__.default();
+window.Fire = new vue__WEBPACK_IMPORTED_MODULE_6__.default();
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -2783,16 +2836,16 @@ window.Fire = new vue__WEBPACK_IMPORTED_MODULE_5__.default();
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-vue__WEBPACK_IMPORTED_MODULE_5__.default.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue").default);
-vue__WEBPACK_IMPORTED_MODULE_5__.default.component(vform_src_components_bootstrap5__WEBPACK_IMPORTED_MODULE_4__.HasError.name, vform_src_components_bootstrap5__WEBPACK_IMPORTED_MODULE_4__.HasError);
-vue__WEBPACK_IMPORTED_MODULE_5__.default.component(vform_src_components_bootstrap5__WEBPACK_IMPORTED_MODULE_4__.AlertError.name, vform_src_components_bootstrap5__WEBPACK_IMPORTED_MODULE_4__.AlertError);
+vue__WEBPACK_IMPORTED_MODULE_6__.default.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue").default);
+vue__WEBPACK_IMPORTED_MODULE_6__.default.component(vform_src_components_bootstrap5__WEBPACK_IMPORTED_MODULE_4__.HasError.name, vform_src_components_bootstrap5__WEBPACK_IMPORTED_MODULE_4__.HasError);
+vue__WEBPACK_IMPORTED_MODULE_6__.default.component(vform_src_components_bootstrap5__WEBPACK_IMPORTED_MODULE_4__.AlertError.name, vform_src_components_bootstrap5__WEBPACK_IMPORTED_MODULE_4__.AlertError);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-var app = new vue__WEBPACK_IMPORTED_MODULE_5__.default({
+var app = new vue__WEBPACK_IMPORTED_MODULE_6__.default({
   el: '#app',
   router: router
 });
@@ -66191,75 +66244,79 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "content" }, [
-    _c("div", { staticClass: "container" }, [
-      _c("h2", { staticClass: "mb-3" }, [
-        _vm._v("LIST DES EMPLOYEE \n          "),
-        _c(
-          "div",
-          { staticClass: "float-right", on: { click: _vm.resetModal } },
-          [_c("i", { staticClass: "fas fa-user-plus pr-3" })]
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "table-responsive " }, [
-        _c("hr"),
-        _vm._v(" "),
-        _c("table", { staticClass: "table custom-table" }, [
-          _vm._m(0),
+    _vm.$gate.is_admin()
+      ? _c("div", { staticClass: "container" }, [
+          _c("h2", { staticClass: "mb-3" }, [
+            _vm._v("LIST DES EMPLOYEE \n          "),
+            _c(
+              "div",
+              { staticClass: "float-right", on: { click: _vm.resetModal } },
+              [_c("i", { staticClass: "fas fa-user-plus pr-3" })]
+            )
+          ]),
           _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.users, function(user) {
-              return _c("tr", { key: user.id, attrs: { scope: "row" } }, [
-                _c("td", [_vm._v(_vm._s(_vm._f("upper")(user.name)))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(user.email))]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    "\n                        " +
-                      _vm._s(_vm._f("upper")(user.bio)) +
-                      "\n                        "
-                  ),
-                  _c("small", { staticClass: "d-block" }, [
-                    _vm._v("Far far away, behind the word mountains")
+          _c("div", { staticClass: "table-responsive " }, [
+            _c("hr"),
+            _vm._v(" "),
+            _c("table", { staticClass: "table custom-table" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.users, function(user) {
+                  return _c("tr", { key: user.id, attrs: { scope: "row" } }, [
+                    _c("td", [_vm._v(_vm._s(_vm._f("upper")(user.name)))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(user.email))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(_vm._f("upper")(user.bio)) +
+                          "\n                        "
+                      ),
+                      _c("small", { staticClass: "d-block" }, [
+                        _vm._v("Far far away, behind the word mountains")
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(_vm._f("upper")(user.order)))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(_vm._s(_vm._f("myDate")(user.created_at)))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c("a", { attrs: { href: "#" } }, [
+                        _c("i", {
+                          staticClass: "far fa-edit fa-lg px-1 ",
+                          on: {
+                            click: function($event) {
+                              return _vm.editeUser(user)
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v("/\n                          "),
+                      _c("a", { attrs: { href: "#" } }, [
+                        _c("i", {
+                          staticClass: "far fa-trash-alt fa-lg px-1 red",
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteUser(user.id)
+                            }
+                          }
+                        })
+                      ])
+                    ])
                   ])
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(_vm._f("upper")(user.order)))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(_vm._f("myDate")(user.created_at)))]),
-                _vm._v(" "),
-                _c("td", [
-                  _c("a", { attrs: { href: "#" } }, [
-                    _c("i", {
-                      staticClass: "far fa-edit fa-lg px-1 ",
-                      on: {
-                        click: function($event) {
-                          return _vm.editeUser(user)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v("/\n                          "),
-                  _c("a", { attrs: { href: "#" } }, [
-                    _c("i", {
-                      staticClass: "far fa-trash-alt fa-lg px-1 red",
-                      on: {
-                        click: function($event) {
-                          return _vm.deleteUser(user.id)
-                        }
-                      }
-                    })
-                  ])
-                ])
-              ])
-            }),
-            0
-          )
+                }),
+                0
+              )
+            ])
+          ])
         ])
-      ])
-    ]),
+      : _vm._e(),
     _vm._v(" "),
     _c(
       "div",

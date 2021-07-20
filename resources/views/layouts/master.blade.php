@@ -185,6 +185,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </p>
                 </router-link>
               </li>
+              @can('is_admin')
+
           <li class="nav-item has-treeview ">
             <a href="#" class="nav-link ">
               <i class="fas fa-sync-alt fa-lg pr-2 teal "></i>
@@ -203,6 +205,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               
             </ul>
           </li>
+          @endcan
+
           @can('is_admin')
             
           <li class="nav-item">
@@ -282,7 +286,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 </div>
 <!-- ./wrapper -->
+@auth
+<script>
 
+  window.user = @json(auth()->user());
+</script>
+@endauth
 <!-- REQUIRED SCRIPTS -->
 <script src="js1/jquery-3.3.1.min.js"></script>
 <script src="js1/popper.min.js"></script>

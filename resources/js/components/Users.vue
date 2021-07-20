@@ -1,6 +1,6 @@
 <template>
      <div class="content">
-    <div class="container">
+    <div class="container" v-if="$gate.is_admin()">
       <h2 class="mb-3">LIST DES EMPLOYEE 
           <div 
           @click="resetModal"
@@ -249,9 +249,12 @@ import { Button, HasError, AlertError } from 'vform/src/components/bootstrap5'
           }
         },
         created() {
+          if(this.$gate.is_admin()){
             this.loadUsers();
             Fire.$on('afterCreated', () => this.loadUsers());
             // setInterval(() => this.loadUsers(), 3000);
+          }
+            
         }
     }
 </script>
