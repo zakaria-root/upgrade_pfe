@@ -203,6 +203,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
               
             </ul>
           </li>
+          @can('is_admin')
+            
+          <li class="nav-item">
+            <router-link to="/development" class="nav-link">
+              <i class="fas fa-tools fa-lg pr-2 indigo"></i>
+              <p>
+                <b>Development</b>
+                
+              </p>
+            </router-link>
+          </li>
+          @endcan
           <li class="nav-item">
             <router-link to="/profile" class="nav-link">
               <i class="fas fa-user fa-lg pr-2 orange"></i>

@@ -166,11 +166,12 @@ import { Button, HasError, AlertError } from 'vform/src/components/bootstrap5'
                this.$Progress.finish();
             })
             .catch(() =>{
-              swalWithBootstrapButtons.fire(
-                'Cancelled',
-                'Your imaginary file is safe :)',
-                'error'
-              )
+               Swal.fire({
+                    icon: 'error',
+                  title: 'Oops...',
+                  text: 'Something went wrong!',
+                  
+                })
               this.$Progress.fail();
             })
           },
@@ -207,15 +208,14 @@ import { Button, HasError, AlertError } from 'vform/src/components/bootstrap5'
                 this.$Progress.finish()
                 })
                 .catch(() => {
-                  swalWithBootstrapButtons.fire(
-                    'Cancelled',
-                    'Your imaginary file is safe :)',
-                    'error'
-                  )
-                  this.$Progress.fail()
+                  Swal.fire({
+                    icon: 'error',
+                  title: 'Oops...',
+                  text: 'Something went wrong!',
+                  
                 })
-
-                
+                this.$Progress.fail();
+                })
               }
             })
           },
