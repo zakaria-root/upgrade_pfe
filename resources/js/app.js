@@ -22,6 +22,7 @@ import {
 } from 'vform/src/components/bootstrap5'
 import Vue from 'vue';
 import Gate from './Gate';
+import _ from 'lodash';
 
 Vue.prototype.$gate = new Gate(window.user);
 
@@ -59,6 +60,7 @@ Vue.filter('upper', (value) => {
 })
 
 
+
 //filter vue date
 Vue.filter('myDate', (date) => {
   return moment(date).format('MMMM Do YYYY');
@@ -68,7 +70,8 @@ const routes = [
     { path: '/profile', component: require('./components/Profile.vue').default },
     { path: '/development', component: require('./components/Development.vue').default },
     { path: '/dashbord', component: require('./components/Dashbord.vue').default },
-    { path: '/users', component: require('./components/Users.vue').default }
+    { path: '/users', component: require('./components/Users.vue').default },
+    { path: '*', component: require('./components/Errore.vue').default },
   ]
 
   const router = new VueRouter({
@@ -90,8 +93,11 @@ window.Fire = new Vue();
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('not-found', require('./components/Errore.vue').default);
 Vue.component(HasError.name, HasError);
 Vue.component(AlertError.name, AlertError);
+//pagiation 
+Vue.component('pagination', require('laravel-vue-pagination'));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -102,5 +108,15 @@ Vue.component(AlertError.name, AlertError);
 const app = new Vue({
   
     el: '#app',
-    router
+    router,
+
+    data:{
+      search : '',
+    },
+    methods:{
+      searchit:_.debounce(() => {
+        Fire.$emit('searching');
+      },500),
+    }
+
 });

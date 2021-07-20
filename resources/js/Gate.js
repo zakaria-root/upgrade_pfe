@@ -15,4 +15,11 @@ export default class Gate{
   is_user(){
     return user.order === 'user';
   }
+
+  is_admin_or_auther(){
+    if (user.order === 'auther' || user.order === 'admin') {
+      return true;
+    }
+
+  }
 }

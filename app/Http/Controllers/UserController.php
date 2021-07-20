@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+
 class UserController extends Controller
 {
 
@@ -23,8 +24,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        $this->authorize('is_admin');
-        return User::latest()->paginate(10);
+
+       
+        if (Gate::forUser(Auth::user())->allows('is_admin') || Gate::forUser(Auth::user())->allows('is_auther')) {
+            // $this->authorize('is_admin');
+            return User::latest()->paginate(10);
+        }
     }
 
     /**
@@ -109,6 +114,21 @@ class UserController extends Controller
 
     }
 
+    //search user from api
+    public function search(){
+
+        if ($search = request()->get('q')) {
+
+            $users = User::where(function($query) use ($search) {
+                $query->where("name", "LIKE", "%$search%")
+                ->orWhere("email", "LIKE", "%$search%")
+                ->orWhere("order", "LIKE","%$search%" );
+            })->paginate(10);
+        }else{
+            $users = User::latest()->paginate(10);
+        }
+        return $users;
+    }
     /**
      * Remove the specified resource from storage.
      *

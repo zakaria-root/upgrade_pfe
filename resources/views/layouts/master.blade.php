@@ -44,16 +44,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </ul>
 
     <!-- SEARCH FORM -->
-    <form class="form-inline ml-3">
+    <div class=" ml-3">
       <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+        <input 
+        v-model="search"
+        @keyup="searchit"
+        class="form-control form-control-navbar" 
+        type="search" 
+        placeholder="Search" 
+        aria-label="Search"
+        >
         <div class="input-group-append">
-          <button class="btn btn-navbar" type="submit">
+          <button class="btn btn-navbar" @click="searchit">
             <i class="fas fa-search"></i>
           </button>
         </div>
       </div>
-    </form>
+    </div>
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
@@ -166,7 +173,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <img src="https://www.previssima.fr/files/previssima/images_redacteurs/rubriques-thematiques/auto-entrepreneur.jpg" style="height: 40px ; width:36px" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">{{ Auth::user()->name}}</a>
+          <a href="#" class="d-block"><b>{{ Str::upper(Auth::user()->name)}}</b></a>
+           <a href="#" class=""><i>{{ Auth::user()->order }}</i></a>
         </div>
       </div>
 
@@ -185,7 +193,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </p>
                 </router-link>
               </li>
-              @can('is_admin')
+              @can('is_admin_or_auther')
 
           <li class="nav-item has-treeview ">
             <a href="#" class="nav-link ">

@@ -1,6 +1,9 @@
 <template>
-     <div class="content">
-    <div class="container" v-if="$gate.is_admin()">
+      <div class="content">
+        <div v-if="!$gate.is_admin_or_auther()">
+          <not-found></not-found>
+        </div>
+    <div class="container" v-if="$gate.is_admin_or_auther()">
       <h2 class="mb-3">LIST DES EMPLOYEE 
           <div 
           @click="resetModal"
@@ -25,7 +28,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="user in users" :key="user.id" scope="row">
+            <tr v-for="user in users.data" :key="user.id" scope="row">
 
                       
                       <td>{{ user.name | upper }}</td>
@@ -47,9 +50,11 @@
             
             </tr>
 
-           
-            
           </tbody>
+          <tfoot>
+            <pagination class="text-center" :data="users" @pagination-change-page="getResults"></pagination>
+            </tfoot>
+
         </table>
       </div>
 
@@ -151,6 +156,13 @@ import { Button, HasError, AlertError } from 'vform/src/components/bootstrap5'
           }
         },
         methods:{
+          getResults(page = 1) {
+            axios.get('api/user?page=' + page)
+            .then(response => {
+              this.users = response.data;
+          })
+          }
+          ,
           updateUser(){
             this.$Progress.start();
             this.form.put('/api/user/' + this.form.id)
@@ -220,12 +232,15 @@ import { Button, HasError, AlertError } from 'vform/src/components/bootstrap5'
             })
           },
           loadUsers(){
+
+            if(this.$gate.is_admin_or_auther()){
             axios.get('/api/user').then(
               ({data}) => {
-                this.users = data.data;
+                this.users = data;
             
               }
             )
+            }
           },
           createUser(){
             this.$Progress.start();
@@ -249,11 +264,22 @@ import { Button, HasError, AlertError } from 'vform/src/components/bootstrap5'
           }
         },
         created() {
-          if(this.$gate.is_admin()){
+            Fire.$on('searching', () => {
+              
+              let query = this.$parent.search;
+              axios.get("/api/findUser?q=" + query)
+              .then((data) => {
+                this.users = data.data;
+              })
+              .catch(() => {
+                console.log('error');
+
+              })
+            });
             this.loadUsers();
             Fire.$on('afterCreated', () => this.loadUsers());
             // setInterval(() => this.loadUsers(), 3000);
-          }
+          
             
         }
     }
